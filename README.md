@@ -8,9 +8,12 @@ SUPERGNOVA (SUPER-GeNetic cOVariance Analyzer) is a statistical framework to per
 
 ### Prerequisites
 
-The software is developed and tested in Linux and Mac OS environments. The statistical computing software R and the following R packages are required:
+The software is developed and tested in Linux and Mac OS environments. The following softwares and packages are required:
 
-* data.table
+- **R**:
+	- **data.table**
+- **Python 2.7**
+	- **numpy**
 
 ### Tutorial
 
