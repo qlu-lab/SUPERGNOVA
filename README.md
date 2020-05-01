@@ -6,13 +6,21 @@ SUPERGNOVA (SUPER-GeNetic cOVariance Analyzer) is a statistical framework to per
 
 The software is developed and tested in Linux and Mac OS environments. The following softwares and packages are required:
 
+- **Python 2.7**
+	1. **numpy**
+	2. 
+	3. 
+	4. 
+	2. **bitarray**
+	
 - **R**:
 	- **data.table**
-- **Python 2.7**
-	- **numpy**
-	- **bitarray**
 
 ## Tutorial
+
+Suppose you would like to calculate local genetic covariance between phenotypes. We'll need a few types of files:
+
+- **Summary statistics files:** We assume that the files are in the standard format that ldsc understands. 
 
 ## Credits
 
