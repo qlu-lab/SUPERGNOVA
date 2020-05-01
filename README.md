@@ -15,12 +15,13 @@ The software is developed and tested in Linux and Mac OS environments. The follo
 	
 **R:**
 1. data.table
+2. optparse
 
 ## Tutorial
 
-Suppose you would like to calculate local genetic covariance between phenotypes. We'll need a few types of files:
+Suppose you would like to calculate local genetic covariance between two phenotypes. We'll need a few types of files:
 
-- **Summary statistics files:** We assume that the files are in the standard format that ldsc understands. 
+- **Summary statistics files:** We assume that the files are in the standard format that ``ldsc`` understands. If not, make sure to run them through the included ``munge_sumstats.py`` file or use the one included in ``ldsc`` (see [here](https://github.com/bulik/ldsc/wiki/Heritability-and-Genetic-Correlation#reformatting-summary-statistics) for instructions).
 
 ## Credits
 
