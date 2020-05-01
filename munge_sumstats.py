@@ -10,7 +10,7 @@ import gzip
 import bz2
 import argparse
 from scipy.stats import chi2
-from supergnova import MASTHEAD, Logger, sec_to_str
+from ldsc_thin import MASTHEAD, Logger, sec_to_str
 import time
 np.seterr(invalid='ignore')
 
