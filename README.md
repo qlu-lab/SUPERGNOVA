@@ -13,7 +13,7 @@ The software is developed and tested in Linux and Mac OS environments. The follo
 4. sklearn
 5. bitarray
 	
-**R:**:
+**R:**
 1. data.table
 
 ## Tutorial
