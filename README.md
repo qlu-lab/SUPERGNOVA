@@ -11,7 +11,7 @@ The software is developed and tested in Linux and Mac OS environments. The follo
 3. **scipy**
 4. **pandas**
 5. **sklearn**
-6. **abitarray**
+6. **bitarray**
 
 ## Tutorial
 
