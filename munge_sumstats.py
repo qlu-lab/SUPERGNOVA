@@ -41,10 +41,9 @@ class Logger(object):
     def log(self, msg):
         '''
         Print to log file.
-        TODO: Also print to stdout if verbose flag is set.
 
         '''
-        print(msg, file=self.log_fh)
+        self.log_fh.write(msg)
 
 
 null_values = {
