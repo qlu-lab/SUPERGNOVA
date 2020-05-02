@@ -21,7 +21,7 @@ Suppose you would like to calculate local genetic covariance between two phenoty
 
 - **Plink bfiles:** These are files .bed/.bim/.fam format. You can download some that we have prepared for you here. These files are from the 1000 Genomes Project, with rare variants (MAF < 5\%) filtered out.
 
-- **Genome partition files**: These files should be in bed format, one for each chromosome. Please note that different population may have different genome partition. Here is an example data for European population.
+- **Genome partition files**: These files should be in bed format, one for each chromosome. Please note that different population may have different genome partition. Here is an example dataset for European population.
 
 More details about these supplied files can be found in here.
 
