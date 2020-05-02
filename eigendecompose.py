@@ -1,13 +1,5 @@
 #!/usr/bin/env python
-'''
-(c) 2014 Brendan Bulik-Sullivan and Hilary Finucane
 
-LDSC is a command line tool for estimating
-    1. LD Score
-    2. heritability / partitioned heritability
-    3. genetic covariance / correlation
-
-'''
 from __future__ import division, print_function
 import ldscore.ldscore as ld
 import ldscore.parse as ps
@@ -20,14 +12,7 @@ try:
 except TypeError:
     raise ImportError('LDSC requires pandas version > 0.15.2')
 
-__version__ = '1.0.0'
-MASTHEAD = "*********************************************************************\n"
-MASTHEAD += "* LD Score Regression (LDSC)\n"
-MASTHEAD += "* Version {V}\n".format(V=__version__)
-MASTHEAD += "* (C) 2014-2015 Brendan Bulik-Sullivan and Hilary Finucane\n"
-MASTHEAD += "* Broad Institute of MIT and Harvard / MIT Department of Mathematics\n"
-MASTHEAD += "* GNU General Public License v3\n"
-MASTHEAD += "*********************************************************************\n"
+
 pd.set_option('display.max_rows', 500)
 pd.set_option('display.max_columns', 500)
 pd.set_option('display.width', 1000)
@@ -35,39 +20,6 @@ pd.set_option('precision', 4)
 pd.set_option('max_colwidth',1000)
 np.set_printoptions(linewidth=1000)
 np.set_printoptions(precision=4)
-
-
-def sec_to_str(t):
-    '''Convert seconds to days:hours:minutes:seconds'''
-    [d, h, m, s, n] = reduce(lambda ll, b : divmod(ll[0], b) + ll[1:], [(t, 1), 60, 60, 24])
-    f = ''
-    if d > 0:
-        f += '{D}d:'.format(D=d)
-    if h > 0:
-        f += '{H}h:'.format(H=h)
-    if m > 0:
-        f += '{M}m:'.format(M=m)
-
-    f += '{S}s'.format(S=s)
-    return f
-
-
-class Logger(object):
-    '''
-    Lightweight logging.
-    TODO: replace with logging module
-
-    '''
-    def __init__(self, fh):
-        self.log_fh = open(fh, 'wb')
-
-    def log(self, msg):
-        '''
-        Print to log file.
-        TODO: Also print to stdout if verbose flag is set.
-
-        '''
-        print(msg, file=self.log_fh)
 
 
 def _remove_dtype(x):

@@ -10,7 +10,6 @@ import gzip
 import bz2
 import argparse
 from scipy.stats import chi2
-from eigendecompose import MASTHEAD, Logger, sec_to_str
 import time
 np.seterr(invalid='ignore')
 
@@ -19,6 +18,34 @@ try:
     x.drop_duplicates(subset='A')
 except TypeError:
     raise ImportError('LDSC requires pandas version > 0.15.2')
+
+__version__ = '1.0.0'
+MASTHEAD = "*********************************************************************\n"
+MASTHEAD += "* LD Score Regression (LDSC)\n"
+MASTHEAD += "* Version {V}\n".format(V=__version__)
+MASTHEAD += "* (C) 2014-2015 Brendan Bulik-Sullivan and Hilary Finucane\n"
+MASTHEAD += "* Broad Institute of MIT and Harvard / MIT Department of Mathematics\n"
+MASTHEAD += "* GNU General Public License v3\n"
+MASTHEAD += "*********************************************************************\n"
+
+
+class Logger(object):
+    '''
+    Lightweight logging.
+    TODO: replace with logging module
+
+    '''
+    def __init__(self, fh):
+        self.log_fh = open(fh, 'wb')
+
+    def log(self, msg):
+        '''
+        Print to log file.
+        TODO: Also print to stdout if verbose flag is set.
+
+        '''
+        print(msg, file=self.log_fh)
+
 
 null_values = {
 
@@ -142,6 +169,20 @@ describe_cname = {
     'SIGNED_SUMSTAT': 'Directional summary statistic as specified by --signed-sumstats.',
     'NSTUDY': 'Number of studies in which the SNP was genotyped.'
 }
+
+def sec_to_str(t):
+    '''Convert seconds to days:hours:minutes:seconds'''
+    [d, h, m, s, n] = reduce(lambda ll, b : divmod(ll[0], b) + ll[1:], [(t, 1), 60, 60, 24])
+    f = ''
+    if d > 0:
+        f += '{D}d:'.format(D=d)
+    if h > 0:
+        f += '{H}h:'.format(H=h)
+    if m > 0:
+        f += '{M}m:'.format(M=m)
+
+    f += '{S}s'.format(S=s)
+    return f
 
 
 def read_header(fh):
