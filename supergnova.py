@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import argparse, os.path, sys
 from prep import prep
-from LD_eigen import ldeigen
+from eigendecompose import ldeigen
 import pandas as pd
 from calculate import calculate
 
@@ -17,16 +17,15 @@ def pipeline(args):
         raise ValueError('--out flag points to an invalid path.')
 
     print('Preparing files for analysis...')
-    gwas_snps, N1, N2, beds = prep(args.bfile,
-                                     args.bed,
-                                     args.sumstats1,
-                                     args.sumstats2)
+    gwas_snps, N1, N2 = prep(args.bfile,
+                                args.sumstats1,
+                                args.sumstats2)
     if args.N1 is not None:
         N1 = args.N1
     if args.N2 is not None:
         N2 = args.N2
     print('Performing eigen decomposition of LD matrix...')
-    tilde, h1, h2, = ldeigen(args.bfile, annots, gwas_snps)
+    tilde, h1, h2, = ldeigen
     print('Calculating local genetic covariance...')
     out = calculate(gwas_snps, beds, N1, N2)
     out.to_csv(args.out, sep=' ', na_rep='NA', index=False)
