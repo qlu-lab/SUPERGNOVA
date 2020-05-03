@@ -9,31 +9,6 @@ def allign_alleles(df):
     Here, we take advantage of numpy's vectorized functions for performance.
     """
     d = {'A': 0, 'C': 1, 'G': 2, 'T': 3}
-    alleles = []
-    for colname in ['A1_ref', 'A2_ref', 'A1_x', 'A2_x', 'A1_y', 'A2_y']:
-        tmp = np.empty(len(df[colname]), dtype=int)
-        for k, v in d.items():
-            tmp[np.array(df[colname]) == k] = v
-        alleles.append(tmp)
-    reversed_alleles_x = np.logical_and(alleles[0] == alleles[3], 
-        alleles[1] == alleles[2])
-    reversed_strand_flip_alleles_x = np.logical_and(alleles[0] == 3 - alleles[3],
-        alleles[1] == 3 - alleles[2])
-    to_flip_x = np.logical_or(reversed_alleles_x, reversed_strand_flip_alleles_x)
-    df['Z_x'] *= -2 * to_flip_x + 1
-    reversed_alleles_y = np.logical_and(alleles[0] == alleles[5], 
-        alleles[1] == alleles[4])
-    reversed_strand_flip_alleles_y = np.logical_and(alleles[0] == 3 - alleles[5],
-        alleles[1] == 3 - alleles[4])
-    to_flip_y = np.logical_or(reversed_alleles_y, reversed_strand_flip_alleles_y)
-    df['Z_y'] *= -2 * to_flip_y + 1
-
-
-def matched_or_reversed(df):
-    """Returns boolean array signifying whether rows have matched or reversed
-    alleles.
-    """
-    d = {'A': 0, 'C': 1, 'G': 2, 'T': 3}
     a = []  # array of alleles
     for colname in ['A1_ref', 'A2_ref', 'A1_x', 'A2_x', 'A1_y', 'A2_y']:
         tmp = np.empty(len(df[colname]), dtype=int)
@@ -48,7 +23,9 @@ def matched_or_reversed(df):
         ((a[0] == 3 - a[4]) & (a[1] == 3 - a[5])))
     reversed_alleles_y = (((a[0] == a[5]) & (a[1] == a[4])) |
         ((a[0] == 3 - a[5]) & (a[1] == 3 - a[4])))
-    return ((matched_alleles_x | reversed_alleles_x) & (matched_alleles_y | reversed_alleles_y))
+    df['Z_x'] *= -2 * reversed_alleles_x + 1
+    df['Z_y'] *= -2 * reversed_alleles_y + 1
+    df = df[((matched_alleles_x|reversed_alleles_x)&(matched_alleles_y|reversed_alleles_y))]
 
 
 def get_files(file_name):
@@ -94,7 +71,6 @@ def prep(bfile, sumstats1, sumstats2):
 
     # flip sign of z-score for allele reversals
     allign_alleles(df)
-    df = df[matched_or_reversed(df)]
 
     return (df[['CHR', 'SNP', 'Z_x', 'Z_y']],
             dfs[0]['N_x'].max(),
