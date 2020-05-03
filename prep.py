@@ -10,17 +10,23 @@ def allign_alleles(df):
     """
     d = {'A': 0, 'C': 1, 'G': 2, 'T': 3}
     alleles = []
-    for colname in ['A1_x', 'A2_x', 'A1_y', 'A2_y']:
+    for colname in ['A1_ref', 'A2_ref', 'A1_x', 'A2_x', 'A1_y', 'A2_y']:
         tmp = np.empty(len(df[colname]), dtype=int)
         for k, v in d.items():
             tmp[np.array(df[colname]) == k] = v
         alleles.append(tmp)
-    reversed_alleles = np.logical_and(alleles[0] == alleles[3],
+    reversed_alleles_x = np.logical_and(alleles[0] == alleles[3], 
         alleles[1] == alleles[2])
-    reversed_strand_flip_alleles = np.logical_and(alleles[0] == 3 - alleles[3],
+    reversed_strand_flip_alleles_x = np.logical_and(alleles[0] == 3 - alleles[3],
         alleles[1] == 3 - alleles[2])
-    to_flip = np.logical_or(reversed_alleles, reversed_strand_flip_alleles)
-    df['Z_y'] *= -2 * to_flip + 1
+    to_flip_x = np.logical_or(reversed_alleles_x, reversed_strand_flip_alleles_x)
+    df['Z_x'] *= -2 * to_flip_x + 1
+    reversed_alleles_y = np.logical_and(alleles[0] == alleles[5], 
+        alleles[1] == alleles[4])
+    reversed_strand_flip_alleles_y = np.logical_and(alleles[0] == 3 - alleles[5],
+        alleles[1] == 3 - alleles[4])
+    to_flip_y = np.logical_or(reversed_alleles_y, reversed_strand_flip_alleles_y)
+    df['Z_y'] *= -2 * to_flip_y + 1
 
 
 def matched_or_reversed(df):
@@ -29,16 +35,21 @@ def matched_or_reversed(df):
     """
     d = {'A': 0, 'C': 1, 'G': 2, 'T': 3}
     a = []  # array of alleles
-    for colname in ['A1_x', 'A2_x', 'A1_y', 'A2_y']:
+    for colname in ['A1_ref', 'A2_ref', 'A1_x', 'A2_x', 'A1_y', 'A2_y']:
         tmp = np.empty(len(df[colname]), dtype=int)
         for k, v in d.items():
             tmp[np.array(df[colname]) == k] = v
         a.append(tmp)
-    matched_alleles = (((a[0] == a[2]) & (a[1] == a[3])) |
-        ((a[0] == 3 - a[2]) | (a[1] == 3 - a[3])))
-    reversed_alleles = (((a[0] == a[3]) & (a[1] == a[2])) |
-        ((a[0] == 3 - a[0]) | (a[1] == 3 - a[2])))
-    return matched_alleles | reversed_alleles
+    matched_alleles_x = (((a[0] == a[2]) & (a[1] == a[3])) |
+        ((a[0] == 3 - a[2]) & (a[1] == 3 - a[3])))
+    reversed_alleles_x = (((a[0] == a[3]) & (a[1] == a[2])) |
+        ((a[0] == 3 - a[3]) & (a[1] == 3 - a[2])))
+    matched_alleles_y = (((a[0] == a[4]) & (a[1] == a[5])) |
+        ((a[0] == 3 - a[4]) & (a[1] == 3 - a[5])))
+    reversed_alleles_y = (((a[0] == a[5]) & (a[1] == a[4])) |
+        ((a[0] == 3 - a[5]) & (a[1] == 3 - a[4])))
+    return (matched_alleles_x | reversed_alleles_x) & 
+        (matched_alleles_y | reversed_alleles_y)
 
 
 def get_files(file_name):
@@ -59,15 +70,8 @@ def get_files(file_name):
             ValueError('No files matching {}'.format(file_name))
 
 
-def prep(bfile, annot, sumstats1, sumstats2):
+def prep(bfile, sumstats1, sumstats2):
     bim_files = get_files(bfile + '.bim')
-
-    if annot is not None:
-        annot_files = get_files(annot)
-        len_b, len_a = len(bim_files), len(annot_files)
-        if len_b != len_a and len_b > 1 and len_a > 1:
-            raise ValueError("The number of bim files and annotation files " +
-                             "should be the same.")
 
     # read in bim files
     bims = [pd.read_csv(f,
@@ -75,21 +79,6 @@ def prep(bfile, annot, sumstats1, sumstats2):
                         names=['CHR', 'SNP', 'CM', 'BP', 'A1', 'A2'],
                         delim_whitespace=True) for f in bim_files]
     bim = pd.concat(bims, ignore_index=True)
-
-    # read in annotation files
-    if annot is not None:
-        annots = [pd.read_csv(f, delim_whitespace=True) for f in annot_files]
-        for i, a in enumerate(annots):
-            if len(a) != len(bims[i]):
-                raise ValueError("Number of rows in bim and annotation " +
-                                 "files are not equal for {} and {}".format(
-                                    bim_files[i], annot_files[i]))
-            annots[i] = pd.concat([bims[i][['CHR', 'SNP', 'BP', 'CM']],
-                                   pd.Series(np.ones(len(a))),
-                                   a], axis=1)
-            annots[i].rename(columns={0: 'ALL_'}, inplace=True)
-    else:
-        annots = None
 
     dfs = [pd.read_csv(file, delim_whitespace=True)
         for file in [sumstats1, sumstats2]]
@@ -110,5 +99,4 @@ def prep(bfile, annot, sumstats1, sumstats2):
 
     return (df[['CHR', 'SNP', 'Z_x', 'Z_y']],
             dfs[0]['N_x'].max(),
-            dfs[1]['N_y'].max(),
-            annots)
+            dfs[1]['N_y'].max())

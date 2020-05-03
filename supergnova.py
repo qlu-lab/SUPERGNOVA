@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import argparse, os.path, sys
 from prep import prep
-from eigendecompose import ldeigen
+from ldsc_thin import ldscore
 import pandas as pd
 from calculate import calculate
 
@@ -24,7 +24,9 @@ def pipeline(args):
         N1 = args.N1
     if args.N2 is not None:
         N2 = args.N2
-    print('Performing eigen decomposition of LD matrix...')
+    print('Calculating LD scores...')
+    ld_scores = ldscore(args.bfile, gwas_snps)
+    print('Performing eigen decomposition for LD matrix...')
     tilde, h1, h2, = ldeigen
     print('Calculating local genetic covariance...')
     out = calculate(gwas_snps, beds, N1, N2)
