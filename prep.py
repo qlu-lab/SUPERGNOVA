@@ -48,8 +48,7 @@ def matched_or_reversed(df):
         ((a[0] == 3 - a[4]) & (a[1] == 3 - a[5])))
     reversed_alleles_y = (((a[0] == a[5]) & (a[1] == a[4])) |
         ((a[0] == 3 - a[5]) & (a[1] == 3 - a[4])))
-    return (matched_alleles_x | reversed_alleles_x) & 
-        (matched_alleles_y | reversed_alleles_y)
+    return ((matched_alleles_x | reversed_alleles_x) & (matched_alleles_y | reversed_alleles_y))
 
 
 def get_files(file_name):
