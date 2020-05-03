@@ -17,13 +17,7 @@ def pipeline(args):
         raise ValueError('--out flag points to an invalid path.')
 
     print('Preparing files for analysis...')
-    gwas_snps, N1, N2 = prep(args.bfile,
-                                args.sumstats1,
-                                args.sumstats2)
-    if args.N1 is not None:
-        N1 = args.N1
-    if args.N2 is not None:
-        N2 = args.N2
+    gwas_snps, N1, N2 = prep(args.bfile, args.sumstats1, args.sumstats2, args.N1, args.N2)
     print('Calculating LD scores...')
     ld_scores = ldscore(args.bfile, gwas_snps)
     print('Performing eigen decomposition for LD matrix...')

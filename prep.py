@@ -46,7 +46,7 @@ def get_files(file_name):
             ValueError('No files matching {}'.format(file_name))
 
 
-def prep(bfile, sumstats1, sumstats2):
+def prep(bfile, sumstats1, sumstats2, N1, N2):
     bim_files = get_files(bfile + '.bim')
 
     # read in bim files
@@ -71,7 +71,12 @@ def prep(bfile, sumstats1, sumstats2):
 
     # flip sign of z-score for allele reversals
     allign_alleles(df)
-
-    return (df[['CHR', 'SNP', 'Z_x', 'Z_y']],
-            dfs[0]['N_x'].max(),
-            dfs[1]['N_y'].max())
+    if N1 is not None:
+        N1 = N1
+    else:
+        N1 = dfs[0]['N_x'].max()
+    if N2 is not None:
+        N2 = N2
+    else:
+        N2 = dfs[1]['N_y'].max()
+    return (df[['CHR', 'SNP', 'Z_x', 'Z_y']], N1, N2)
