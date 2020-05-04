@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 
 from __future__ import division, print_function
-import ldscore.ldscore as ld
-import ldscore.parse as ps
+import ld.ldscore as ld
+import ld.parse as ps
 import numpy as np
 import pandas as pd
 
@@ -12,7 +12,6 @@ try:
 except TypeError:
     raise ImportError('LDSC requires pandas version > 0.15.2')
 
-
 pd.set_option('display.max_rows', 500)
 pd.set_option('display.max_columns', 500)
 pd.set_option('display.width', 1000)
@@ -20,6 +19,24 @@ pd.set_option('precision', 4)
 pd.set_option('max_colwidth',1000)
 np.set_printoptions(linewidth=1000)
 np.set_printoptions(precision=4)
+
+
+class Logger(object):
+    '''
+    Lightweight logging.
+    TODO: replace with logging module
+
+    '''
+    def __init__(self, fh):
+        self.log_fh = open(fh, 'wb')
+
+    def log(self, msg):
+        '''
+        Print to log file.
+        TODO: Also print to stdout if verbose flag is set.
+
+        '''
+        print(msg, file=self.log_fh)
 
 
 def _remove_dtype(x):
@@ -129,7 +146,7 @@ def _ldscore(bfile, annots, gwas_snps):
     scale_suffix = ''
 
     lN = geno_array.ldScoreVarBlocks(block_left, 50, annot=annot_matrix)
-    col_prefix = "L2";
+    col_prefix = "L2"
 
     if n_annot == 1:
         ldscore_colnames = [col_prefix+scale_suffix]
@@ -182,28 +199,18 @@ def _ldscore(bfile, annots, gwas_snps):
     return df
 
 
-def ldscore(bfile, annots, gwas_snps, save_ld):
+def ldscore(bfile, gwas_snps):
     df = None
     if '@' in bfile:
         all_dfs = []
         for i in range(1, 23):
             cur_bfile = bfile.replace('@', str(i))
-            if annots is None:
-                cur_annot = None
-            elif len(annots) > 1:
-                cur_annot = [annots[i - 1]]
-            else:
-                cur_annot = annots
-            all_dfs.append(_ldscore(cur_bfile, cur_annot, gwas_snps))
+            all_dfs.append(_ldscore(cur_bfile, None, gwas_snps))
             print('Computed LD scores for chromosome {}'.format(i))
         df = pd.concat(all_dfs)
     else:
-        df = _ldscore(bfile, annots, gwas_snps)
+        df = _ldscore(bfile, None, gwas_snps)
 
     numeric = df._get_numeric_data()
     numeric[numeric < 0] = 0
-    if save_ld is not None:
-        file_name = save_ld + '.csv.gz'
-        print('Saving computed LD scores to {}.'.format(file_name))
-        df.to_csv(file_name, ' ', index=False, compression='gzip')
     return df

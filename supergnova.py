@@ -5,6 +5,12 @@ from ldsc_thin import ldscore
 import pandas as pd
 from calculate import calculate
 
+try:
+    x = pd.DataFrame({'A': [1, 2, 3]})
+    x.drop_duplicates(subset='A')
+except TypeError:
+    raise ImportError('SUPERGNOVA requires pandas version > 0.15.2')
+
 # returns whether the parent directory of path exists
 def parent_dir_exists(path):
     return os.path.exists(os.path.abspath(os.path.join(path, os.pardir)))
