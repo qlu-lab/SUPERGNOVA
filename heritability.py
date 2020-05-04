@@ -3,6 +3,7 @@ from __future__ import division
 import numpy as np
 import pandas as pd
 
+
 def heritability(gwas_snps, ld_scores, n1, n2):
     Z_x = gwas_snps['Z_x']
     Z_y = gwas_snps['Z_y']
