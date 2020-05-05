@@ -53,4 +53,30 @@ def pipeline(args):
     out.to_csv(args.out, sep=' ', na_rep='NA', index=False)
 
 
+parser = argparse.ArgumentParser()
+
+parser.add_argument('sumstats1',
+    help='The first sumstats file.')
+parser.add_argument('sumstats2',
+    help='The second sumstats file.')
+
+parser.add_argument('--bfile', required=True, type=str,
+    help='Prefix for Plink .bed/.bim/.fam file.')
+parser.add_argument('--bfile', required=True, type=str,
+    help='Prefix for Plink .bed/.bim/.fam file.')
+parser.add_argument('--N1', type=int,
+    help='N of the sumstats1 file. If not provided, this value will be inferred '
+    'from the sumstats1 arg.')
+parser.add_argument('--N2', type=int,
+    help='N of the sumstats2 file. If not provided, this value will be inferred '
+    'from the sumstats2 arg.')
+
+parser.add_argument('--out', required=True, type=str,
+    help='Location to output results.')
+
+if __name__ == '__main__':
+    if sys.version_info[0] != 2:
+        print('ERROR: GNOVA does not run on Python 3. Please run it on Python 2.7.x.')
+        sys.exit(1)
+    pipeline(parser.parse_args())
 
