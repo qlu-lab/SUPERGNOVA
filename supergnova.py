@@ -47,7 +47,7 @@ def pipeline(args):
     h_1, h_2 = heritability(gwas_snps, ld_scores, N1, N2)
     print('The genome-wide heritability of the first trait is {}.\nThe genome-wide heritability of the second trait is {}.'.format(h1, h2))
     print('Calculating phenotypic correlation...')
-    pheno_corr, pheno_corr_var = pheno(gwas_snps, ld_scores, N1, N2)
+    pheno_corr, pheno_corr_var = pheno(gwas_snps, ld_scores, N1, N2, h_1, h_2)
     print('Calculating local genetic covariance...')
     out = calculate()
     out.to_csv(args.out, sep=' ', na_rep='NA', index=False)
