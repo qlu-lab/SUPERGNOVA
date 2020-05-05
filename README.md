@@ -50,18 +50,18 @@ python2 supergnova.py data/CD.sumstats.gz data/UC.sumstats.gz \
 ### Explanation of Output
 The output will be a whitespace-delimited text file, with the rows corresponding to different annotations and the columns as such:
 
-- `annot_name:` The name of the annotation.
-- `rho:` The genetic covariance estimate.
-- `rho_corrected:` The genetic covariance estimate with sample overlap correction.
-- `se_rho:` The standard error of the estimate of `rho`.
-- `pvalue:` The p-value from the statistical test for genetic covariance.
-- `pvalue_corrected:` The p-value from the statistical test for genetic covariance with sample overlap correction.
-- `corr`: The genetic correlation estimate.
-- `corr_corrected`: The genetic correlation estimate with sample overlap correction.
-- `h2_1`: The heritability estimate for the first trait.
-- `h2_2`: The heritability estimate for the second trait.
+- `chr`: The chromosome.
+- `start`: The start position of the genomic region from the input genome partition file.
+- `end`: The end position of the genomic region from the input genome partiition file.
+- `rho`: The estimation of local genetic covariance.
+- `corr`: The estimation of local genetic correlation.
+- `h1`: The estimation of local heritability of the first trait by method of moments.
+- `h2`: The estimation of local heritability of the second trait by method of moments.
+- `var`: The variance of the estimation of local genetic covariance.
+- `p`: The p value of local genetic covariance.
+- `m`: The number of SNPs involved in the estimation of local genetic covariance in the genomic region.
 
-NOTE: When functional annotations are present, the true heritability in each annotation category may be small. Although methods for estimating annotation-stratified heritability exist, they may provide unstable, in many cases negative heritability estimates, especially when a number of annotation categories are related to the repressed or non-functional genome. GNOVA ignores negative hertiability estimates, leaving the correlation estimates as 'NaN'. So, we recommend the users to focus on genetic covariance instead of genetic correlation when performing annotation-stratified analysis.
+NOTE: The true heritability of some genomic regions for some traits may be very small. Although methods for estimating local heritability exist, they may provide unstable, in many cases negative heritability estimates. SUPERGNOVA ignores negative heritability estimates, leaving the correlation estimates as 'NA'. So, we recommend the users to focus on genetic covariance instead of genetic correlation when performing local genetic covariance analysis.
 
 
 ## Credits
