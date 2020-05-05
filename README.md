@@ -49,7 +49,7 @@ python2 supergnova.py data/CD.sumstats.gz data/UC.sumstats.gz \
 
 ### Additional Command-Line Arguments
 
-- `--thread`: The thread number used for calculation (optional). If they are not provided, the default is the number of CPUs detected.
+- `--thread`: The thread number used for calculation (optional). If they are not provided, the default is the number of detected CPUs.
 
 ### Explanation of Output
 The output will be a whitespace-delimited text file, with the rows corresponding to different annotations and the columns as such:
