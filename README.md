@@ -43,9 +43,26 @@ python2 supergnova.py data/CD.sumstats.gz data/UC.sumstats.gz \
 
 - The `bfile` argument denotes the prefix of the `.bed/.bim/.fam` genotypic data files. Note the '@', which denotes a wildcard character that SUPERGNOVA will be replaced with 1-22. Alternatively, if you have one set of genotypic data files with 22 chromosome combined, you can just specify one bfile. We recommend you use the whole genome data as the reference panel although you may only be interested in the local genetic correlation in one specific region. 
 
-- The `partition` argument denotes the genome partition file in bed format. Note the '@', which denotes a wildcard character that SUPERGNOVA will be replaced with 1-22. Alternatively, if you are only interested in some specific genomic regions, you can just specify one bed file that summarizes all the regions you want to look.
+- The `partition` argument denotes the genome partition file in bed format. Note the '@', which denotes a wildcard character that SUPERGNOVA will be replaced with 1-22. Alternatively, if you are only interested in some specific genomic regions, you can just specify one bed file that summarizes all the regions that you want to look into.
 
 - The `out` flag denotes the file location for the results to be outputted to.
+
+## Explanation of Output
+The output will be a whitespace-delimited text file, with the rows corresponding to different annotations and the columns as such:
+
+- `annot_name:` The name of the annotation.
+- `rho:` The genetic covariance estimate.
+- `rho_corrected:` The genetic covariance estimate with sample overlap correction.
+- `se_rho:` The standard error of the estimate of `rho`.
+- `pvalue:` The p-value from the statistical test for genetic covariance.
+- `pvalue_corrected:` The p-value from the statistical test for genetic covariance with sample overlap correction.
+- `corr`: The genetic correlation estimate.
+- `corr_corrected`: The genetic correlation estimate with sample overlap correction.
+- `h2_1`: The heritability estimate for the first trait.
+- `h2_2`: The heritability estimate for the second trait.
+
+NOTE: When functional annotations are present, the true heritability in each annotation category may be small. Although methods for estimating annotation-stratified heritability exist, they may provide unstable, in many cases negative heritability estimates, especially when a number of annotation categories are related to the repressed or non-functional genome. GNOVA ignores negative hertiability estimates, leaving the correlation estimates as 'NaN'. So, we recommend the users to focus on genetic covariance instead of genetic correlation when performing annotation-stratified analysis.
+
 
 ## Credits
 
