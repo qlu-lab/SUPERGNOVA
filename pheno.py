@@ -22,7 +22,7 @@ def pheno(gwas_snps, ld_scores, n1, n2, h1, h2):
     Weight = 1 / (Weight1 * Weight2 + Weight3 ** 2)
 
     nblock = 200
-    blocksize = int(floor(m / nblock)) + 1
+    blocksize = int(np.floor(m / nblock)) + 1
     q_block = np.empty(nblock)
     for i in xrange(nblock):
         ind_start = blocksize * i 
