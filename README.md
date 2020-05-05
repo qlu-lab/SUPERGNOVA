@@ -25,6 +25,16 @@ Suppose you would like to calculate local genetic covariance between  Crohn's di
 
 More details about these supplied files can be found in here.
 
+We may run the following command:
+
+```
+python2 supergnova.py data/CD.sumstats.gz data/UC.sumstats.gz \
+--N1 27726 \
+--N2 28738 \
+--bfile data/bfiles/eur_chr@_SNPmaf5 \
+--partition data/partition/eur_chr@.bed \
+--out results.txt
+```
 ## Credits
 
 Those using the SUPERGNOVA software should cite: Zhang, Y.L. et al. Local genetic correlation analysis reveals heterogeneous etiologic sharing of complex traits. 2020.
