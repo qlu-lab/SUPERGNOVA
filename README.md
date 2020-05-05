@@ -35,6 +35,18 @@ python2 supergnova.py data/CD.sumstats.gz data/UC.sumstats.gz \
 --partition data/partition/eur_chr@.bed \
 --out results.txt
 ```
+## Explanation of Command-Line Arguments
+
+- The first two arguments, `data/CD.sumstats.gz` and `data/UC.sumstats.gz`, denote the locations of the first and second summary statistics files. These files may be compressed using gzip, bz2, zip, xz, or not compressed at all. The program will infer the compression method if the files end with .gz, .bz2, .zip, xz, respectively. As previously mentioned, we assume that the files are in the standard format that `ldsc` understands.
+
+- The `N1` and `N2` arguments (optional) denote the sample sizes of the summary statistics files. If they are not provided, they will be inferred from the summary statistics files.
+
+- The `bfile` argument denotes the prefix of the `.bed/.bim/.fam` genotypic data files. Note the '@', which denotes a wildcard character that GNOVA will be replace with 1-22. Alternatively, if you would only like analysis on one chromosome, you can just specify that one bfile.
+
+- The `annot` argument (optional) denotes the location of the annotation files if doing annotation-stratified analysis. **We assume that for each chromsome that we are doing analysis on, there is a corresponding whitespace-delimited annotation file for that chromosome, such that if there are n rows in the bim file for chromosome 1, there are n+1 rows for the corresponding annotation file (the annotation file should have an extra row denoting the names of the annotations).**
+
+- The `out` flag denotes the file location for the results to be outputted to.
+
 ## Credits
 
 Those using the SUPERGNOVA software should cite: Zhang, Y.L. et al. Local genetic correlation analysis reveals heterogeneous etiologic sharing of complex traits. 2020.
