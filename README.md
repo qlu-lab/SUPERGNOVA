@@ -41,9 +41,9 @@ python2 supergnova.py data/CD.sumstats.gz data/UC.sumstats.gz \
 
 - The `N1` and `N2` arguments (optional) denote the sample sizes of the summary statistics files. If they are not provided, they will be inferred from the summary statistics files.
 
-- The `bfile` argument denotes the prefix of the `.bed/.bim/.fam` genotypic data files. Note the '@', which denotes a wildcard character that GNOVA will be replace with 1-22. Alternatively, if you have one set of genotypic data files with 22 chromosome combined, you can just specify that one bfile. We recommend you use the whole genome data as the reference panel although you may only be interested in the local genetic correlation in one specific region. 
+- The `bfile` argument denotes the prefix of the `.bed/.bim/.fam` genotypic data files. Note the '@', which denotes a wildcard character that SUPERGNOVA will be replaced with 1-22. Alternatively, if you have one set of genotypic data files with 22 chromosome combined, you can just specify one bfile. We recommend you use the whole genome data as the reference panel although you may only be interested in the local genetic correlation in one specific region. 
 
-- The `partition` argument denotes the genome partition file in bed format. 
+- The `partition` argument denotes the genome partition file in bed format. Note the '@', which denotes a wildcard character that SUPERGNOVA will be replaced with 1-22. Alternatively, if you are only interested in some specific genomic regions, you can just specify one bed file that summarizes all the regions you want to look.
 
 - The `out` flag denotes the file location for the results to be outputted to.
 
