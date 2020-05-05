@@ -15,6 +15,13 @@ The software is developed and tested in Linux and Mac OS environments. The follo
 
 ## Tutorial
 
+You can download SUPERGNOVA by
+
+```
+$ git clone https://github.com/qlu-lab/SUPERGNOVA
+$ cd ./SUPERGNOVA
+```
+
 Suppose you would like to calculate local genetic covariance between  Crohn's disease and ulcerative colitis. We'll need a few types of files:
 
 - **Summary statistics files:** You can get your own GWAS summary statistics files for these two diseases [here](https://www.ibdgenetics.org). We assume that the files are in the standard format that ``ldsc`` understands. If not, make sure to run them through the included ``munge_sumstats.py`` file or use the one included in ``ldsc`` (see [here](https://github.com/bulik/ldsc/wiki/Heritability-and-Genetic-Correlation#reformatting-summary-statistics) for instructions).
