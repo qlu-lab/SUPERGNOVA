@@ -35,7 +35,7 @@ python2 supergnova.py data/CD.sumstats.gz data/UC.sumstats.gz \
 --partition data/partition/eur_chr@.bed \
 --out results.txt
 ```
-## Explanation of Command-Line Arguments
+### Explanation of Command-Line Arguments
 
 - The first two arguments, `data/CD.sumstats.gz` and `data/UC.sumstats.gz`, denote the locations of the first and second summary statistics files. These files may be compressed using gzip, bz2, zip, xz, or not compressed at all. The program will infer the compression method if the files end with .gz, .bz2, .zip, xz, respectively. As previously mentioned, we assume that the files are in the standard format that `ldsc` understands.
 
@@ -47,7 +47,7 @@ python2 supergnova.py data/CD.sumstats.gz data/UC.sumstats.gz \
 
 - The `out` flag denotes the file location for the results to be outputted to.
 
-## Explanation of Output
+### Explanation of Output
 The output will be a whitespace-delimited text file, with the rows corresponding to different annotations and the columns as such:
 
 - `annot_name:` The name of the annotation.
