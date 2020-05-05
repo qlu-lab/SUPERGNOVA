@@ -62,8 +62,8 @@ parser.add_argument('sumstats2',
 
 parser.add_argument('--bfile', required=True, type=str,
     help='Prefix for Plink .bed/.bim/.fam file.')
-parser.add_argument('--bfile', required=True, type=str,
-    help='Prefix for Plink .bed/.bim/.fam file.')
+parser.add_argument('--partition', required=True, type=str,
+    help='')
 parser.add_argument('--N1', type=int,
     help='N of the sumstats1 file. If not provided, this value will be inferred '
     'from the sumstats1 arg.')
