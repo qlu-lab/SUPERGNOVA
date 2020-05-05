@@ -19,8 +19,19 @@ def pheno(gwas_snps, ld_scores, n1, n2, h1, h2):
     Weight2 = 1 + n2 * h2 * ld_scores / m
     Weight3 = np.mean(Z_xy) * ld_scores
 
-    Weight = 1 / (Weight1 * Weight2 + Weight3^2)
+    Weight = 1 / (Weight1 * Weight2 + Weight3 ** 2)
 
     nblock = 200
+    blocksize = int(floor(m / nblock)) + 1
     q_block = np.empty(nblock)
-    for i, z_xy in enumerate(np.array_split(Z_xy, nblock))
+    for i in xrange(nblock):
+        ind_start = blocksize * i 
+        ind_end = min(m-1, blocksize * (i + 1))
+        l = np.delete(ld_scores, range(ind_start, ind_end))
+        z_xy = np.delete(Z_xy, range(ind_start, ind_end))
+        w = np.delete(Weight, range(ind_start, ind_end))
+        lm = linear_model.LinearRegression().fit(pd.DataFrame(l), pd.DataFrame(z_xy), sample_weight=w)
+        q_block[i] = lm.intercept_[0]
+    pheno_corr = np.mean(q_block)
+    pheno_corr_var = np.cov(q_block, bias=True) * (nblock - 1)
+    return pheno_corr, pheno_corr_var
