@@ -43,7 +43,7 @@ python2 supergnova.py data/CD.sumstats.gz data/UC.sumstats.gz \
 
 - The `bfile` argument denotes the prefix of the `.bed/.bim/.fam` genotypic data files. Note the '@', which denotes a wildcard character that GNOVA will be replace with 1-22. Alternatively, if you have one set of genotypic data files with 22 chromosome combined, you can just specify that one bfile. We recommend you use the whole genome data as the reference panel although you may only be interested in the local genetic correlation in one specific region. 
 
-- The `partition` argument denotes the genome partition file. **We assume that for each chromsome that we are doing analysis on, there is a corresponding whitespace-delimited annotation file for that chromosome, such that if there are n rows in the bim file for chromosome 1, there are n+1 rows for the corresponding annotation file (the annotation file should have an extra row denoting the names of the annotations).**
+- The `partition` argument denotes the genome partition file in bed format. **We assume that for each chromsome that we are doing analysis on, there is a corresponding whitespace-delimited annotation file for that chromosome, such that if there are n rows in the bim file for chromosome 1, there are n+1 rows for the corresponding annotation file (the annotation file should have an extra row denoting the names of the annotations).**
 
 - The `out` flag denotes the file location for the results to be outputted to.
 
