@@ -25,7 +25,7 @@ Suppose you would like to calculate local genetic covariance between  Crohn's di
 
 More details about these supplied files can be found in here.
 
-We may run the following command:
+You may run the following command:
 
 ```
 python2 supergnova.py data/CD.sumstats.gz data/UC.sumstats.gz \
