@@ -6,20 +6,6 @@ import ld.parse as ps
 import numpy as np
 import pandas as pd
 
-try:
-    x = pd.DataFrame({'A': [1, 2, 3]})
-    x.drop_duplicates(subset='A')
-except TypeError:
-    raise ImportError('LDSC requires pandas version > 0.15.2')
-
-pd.set_option('display.max_rows', 500)
-pd.set_option('display.max_columns', 500)
-pd.set_option('display.width', 1000)
-pd.set_option('precision', 4)
-pd.set_option('max_colwidth',1000)
-np.set_printoptions(linewidth=1000)
-np.set_printoptions(precision=4)
-
 
 def _remove_dtype(x):
     '''Removes dtype: float64 and dtype: int64 from pandas printouts'''

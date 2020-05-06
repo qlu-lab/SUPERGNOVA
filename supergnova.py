@@ -28,6 +28,16 @@ try:
 except TypeError:
     raise ImportError('SUPERGNOVA requires pandas version > 0.15.2')
 
+
+pd.set_option('display.max_rows', 500)
+pd.set_option('display.max_columns', 500)
+pd.set_option('display.width', 1000)
+pd.set_option('precision', 4)
+pd.set_option('max_colwidth',1000)
+np.set_printoptions(linewidth=1000)
+np.set_printoptions(precision=4)
+
+
 # returns whether the parent directory of path exists
 def parent_dir_exists(path):
     return os.path.exists(os.path.abspath(os.path.join(path, os.pardir)))
@@ -49,7 +59,7 @@ def pipeline(args):
     print('Calculating phenotypic correlation...')
     pheno_corr, pheno_corr_var = pheno(gwas_snps, ld_scores, N1, N2, h_1, h_2)
     print('Calculating local genetic covariance...')
-    out = calculate(args.bfile, bed, gwas.thread, gwas_snps, N1, N2, h_1, h_2)
+    out = calculate(args.bfile, bed, args.thread, gwas_snps, N1, N2, h_1, h_2)
     out.to_csv(args.out, sep=' ', na_rep='NA', index=False)
 
 
