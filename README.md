@@ -54,7 +54,7 @@ python2 supergnova.py ./data/CD.sumstats.gz ./data/UC.sumstats.gz \
 ```
 ### Explanation of Command-Line Arguments
 
-- The first two arguments, `data/CD.sumstats.gz` and `data/UC.sumstats.gz`, denote the locations of the first and second summary statistics files. These files may be compressed using gzip, bz2, zip, xz, or not compressed at all. The program will infer the compression method if the files end with .gz, .bz2, .zip, xz, respectively. As previously mentioned, we assume that the files are in the standard format that `ldsc` understands.
+- The first two arguments, `./data/CD.sumstats.gz` and `./data/UC.sumstats.gz`, denote the locations of the first and second summary statistics files. These files may be compressed using gzip, bz2, zip, xz, or not compressed at all. The program will infer the compression method if the files end with .gz, .bz2, .zip, xz, respectively. As previously mentioned, we assume that the files are in the standard format that `ldsc` understands.
 
 - The `N1` and `N2` arguments (optional) denote the sample sizes of the summary statistics files. If they are not provided, they will be inferred from the summary statistics files.
 
