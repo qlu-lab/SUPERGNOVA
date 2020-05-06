@@ -30,14 +30,14 @@ Suppose you would like to calculate local genetic covariance between  Crohn's di
 ```
 $ mkdir ./data
 $ mkdir ./data/bfiles
-$ wget ftp://ftp.biostat.wisc.edu/pub/lu_group/Projects/SUPERGNOVA/bfiles/*
+$ wget ftp://ftp.biostat.wisc.edu/pub/lu_group/Projects/SUPERGNOVA/bfiles/* -P ./data/bfiles/
 ``` 
 These files are from the 1000 Genomes Project, with rare variants (MAF < 5\%) filtered out.
 
 - **Genome partition files**: These files should be in bed format. Please note that different population may have different genome partition. An example dataset for European population can be downloaded by
 ```
 $ mkdir ./data/partition
-$ wget ftp://ftp.biostat.wisc.edu/pub/lu_group/Projects/SUPERGNOVA/partition/*
+$ wget ftp://ftp.biostat.wisc.edu/pub/lu_group/Projects/SUPERGNOVA/partition/* -P ./data/partition/
 ```
 
 More details about these supplied files can be found in here.
