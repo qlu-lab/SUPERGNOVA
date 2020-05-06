@@ -45,7 +45,7 @@ More details about these supplied files can be found in here.
 You may run the following command:
 
 ```
-python2 supergnova.py data/CD.sumstats.gz data/UC.sumstats.gz \
+python2 supergnova.py ./data/CD.sumstats.gz ./data/UC.sumstats.gz \
 --N1 27726 \
 --N2 28738 \
 --bfile data/bfiles/eur_chr@_SNPmaf5 \
