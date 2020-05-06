@@ -46,15 +46,20 @@ def get_files(file_name):
             ValueError('No files matching {}'.format(file_name))
 
 
-def prep(bfile, sumstats1, sumstats2, N1, N2):
+def prep(bfile, partition, sumstats1, sumstats2, N1, N2):
     bim_files = get_files(bfile + '.bim')
-
+    bed_files = get_files(partition)
     # read in bim files
     bims = [pd.read_csv(f,
                         header=None,
                         names=['CHR', 'SNP', 'CM', 'BP', 'A1', 'A2'],
                         delim_whitespace=True) for f in bim_files]
     bim = pd.concat(bims, ignore_index=True)
+
+    # read in bed files
+    beds = [pd.read_csv(f,
+                        delim_whitespace=True) for f in bed_files]
+    bed = pd.concat(beds, ignore_index=True)
 
     dfs = [pd.read_csv(file, delim_whitespace=True)
         for file in [sumstats1, sumstats2]]
@@ -79,4 +84,4 @@ def prep(bfile, sumstats1, sumstats2, N1, N2):
         N2 = N2
     else:
         N2 = dfs[1]['N_y'].max()
-    return (df[['CHR', 'SNP', 'Z_x', 'Z_y']], N1, N2)
+    return (df[['CHR', 'SNP', 'Z_x', 'Z_y']], bed, N1, N2)

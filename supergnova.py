@@ -40,7 +40,7 @@ def pipeline(args):
         raise ValueError('--out flag points to an invalid path.')
 
     print('Preparing files for analysis...')
-    gwas_snps, N1, N2 = prep(args.bfile, args.sumstats1, args.sumstats2, args.N1, args.N2)
+    gwas_snps, bed, N1, N2 = prep(args.bfile, args.partition, args.sumstats1, args.sumstats2, args.N1, args.N2)
     print('Calculating LD scores...')
     ld_scores = ldscore(args.bfile, gwas_snps)
     print('Calculating heritability...')
@@ -49,7 +49,7 @@ def pipeline(args):
     print('Calculating phenotypic correlation...')
     pheno_corr, pheno_corr_var = pheno(gwas_snps, ld_scores, N1, N2, h_1, h_2)
     print('Calculating local genetic covariance...')
-    out = calculate(args.bfile, args.partition, gwas_snps, N1, N2, h_1, h_2)
+    out = calculate(args.bfile, bed, gwas.thread, gwas_snps, N1, N2, h_1, h_2)
     out.to_csv(args.out, sep=' ', na_rep='NA', index=False)
 
 
