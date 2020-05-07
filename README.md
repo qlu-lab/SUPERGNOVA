@@ -13,7 +13,7 @@ The software is developed and tested in Linux and Mac OS environments. It can pe
 5. **sklearn**
 6. **bitarray**
 
-To perform multi-thread computing, you need request multiple cores from your server.
+To perform multi-thread computing, you need to request multiple cores from your server.
 
 ## Tutorial
 
