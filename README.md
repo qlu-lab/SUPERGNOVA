@@ -13,6 +13,8 @@ The software is developed and tested in Linux and Mac OS environments. It can pe
 5. **sklearn**
 6. **bitarray**
 
+To perform multi-thread computing, you need request multiple cores from your server.
+
 ## Tutorial
 
 You can download SUPERGNOVA by:
