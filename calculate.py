@@ -153,6 +153,9 @@ def _supergnova(bfile, partition, thread, gwas_snps, n1, n2, h1, h2, pheno_corr,
     pool.close()
     pool.join()
     df = pd.DataFrame(results)
+    df.columns = ["chr", "start", "end", "rho", "corr", "h1", "h2", "var", "p", "m"]
+    convert_dict = {"chr": int, "start": int, "end":int, "m":int}
+    df = df.astype(convert_dict)
     return df
 
 def calculate(bfile, partition, thread, gwas_snps, n1, n2, h1, h2, pheno_corr, pheno_corr_var):
