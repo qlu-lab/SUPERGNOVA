@@ -88,8 +88,5 @@ parser.add_argument('--thread', default= multiprocessing.cpu_count(), type=int,
     help='Thread numbers used for calculation. Default = CPU numbers.')
 
 if __name__ == '__main__':
-    if sys.version_info[0] != 2:
-        print('ERROR: SUPERGNOVA does not run on Python 3. Please run it on Python 2.7.x.')
-        sys.exit(1)
     pipeline(parser.parse_args())
 
