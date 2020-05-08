@@ -106,7 +106,7 @@ def calLocalCov(i, partition, geno_array, coords, bps, gwas_snps, n1, n2, h1, h2
 
     df = pd.DataFrame(OrderedDict({"chr":[CHR], "start":[START], "end":[END], "rho":[Localrho], "corr":[corr], "h1":[Localh1], "h2":[Localh2], "var":[var_rho], "p":[p_value], "m":[m0]}))
 
-    return df
+    return df.values.tolist()
 
 def _supergnova(bfile, partition, thread, gwas_snps, n1, n2, h1, h2, pheno_corr, pheno_corr_var):
     m = len(gwas_snps)
@@ -139,16 +139,18 @@ def _supergnova(bfile, partition, thread, gwas_snps, n1, n2, h1, h2, pheno_corr,
     bps = np.array(array_snps.df['BP'])[geno_array.kept_snps]
 
     ## Calculating local genetic covariance
-
-    pool = multiprocessing.Pool(processes = thread)
-    a_list = list(range(blockN))
-    chunks = [a_list[i::blockN] for i in range(blockN)]
-    def func(i):
-        return calLocalCov(i, tmp_partition, geno_array, coords, bps, tmp_gwas_snps, n1, n2, h1, h2, m, pheno_corr, pheno_corr_var)
     
-    results = pool.map(func, chunks)
-
-    df = pd.concat(results, ignore_index=True)
+    results = []
+    def collect_results(result):
+        results.extend(result)
+    pool = multiprocessing.Pool(processes = thread)
+    for i in range(blockN):
+        pool.apply_async(calLocalCov, args=(i, tmp_partition, geno_array, coords, 
+            bps, tmp_gwas_snps, n1, n2, h1, h2, m, pheno_corr, pheno_corr_var),
+            callback=collect_results)
+    pool.close()
+    pool.join()
+    df = pd.DataFrame(results)
     return df
 
 def calculate(bfile, partition, thread, gwas_snps, n1, n2, h1, h2, pheno_corr, pheno_corr_var):
