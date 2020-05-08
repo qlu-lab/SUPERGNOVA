@@ -10,6 +10,7 @@ import ld.ldscore as ld
 import ld.parse as ps
 from ldsc_thin import __filter_bim__
 from scipy.stats import norm
+from collections import OrderedDict
 
 
 def nearest_Corr(input_mat):
@@ -22,7 +23,7 @@ def nearest_Corr(input_mat):
     return A
 
 
-def calLocalCov(i, partition, geno_array, coords, bps, gwas_snps, n1, n2, h1, h2, m, pheno_corr, pheno_corr_var, queue):
+def calLocalCov(i, partition, geno_array, coords, bps, gwas_snps, n1, n2, h1, h2, m, pheno_corr, pheno_corr_var):
     CHR = partition.iloc[i, 0]
     START = partition.iloc[i, 1]
     END = partition.iloc[i, 2]
@@ -30,8 +31,7 @@ def calLocalCov(i, partition, geno_array, coords, bps, gwas_snps, n1, n2, h1, h2
     idx = np.logical_and(np.logical_and(gwas_snps['CHR']==CHR, bps <= END), bps >= START)
     m0 = np.sum(idx)
     if m0 < 120:
-        queue.put(None)
-        return
+        return None
     
     tmp_coords = coords[idx]
 
@@ -48,8 +48,7 @@ def calLocalCov(i, partition, geno_array, coords, bps, gwas_snps, n1, n2, h1, h2
     d = d[order]
     v = v[:,order]
     if np.sum(d>0) < 120:
-        queue.put(None)
-        return
+        return None
     
     sub_d = d[d>0]
     sub_v = v[:,d>0]
@@ -105,9 +104,9 @@ def calLocalCov(i, partition, geno_array, coords, bps, gwas_snps, n1, n2, h1, h2
     else:
         corr = Localrho / sqrt(Localh1 * Localh2)
 
-    df = pd.DataFrame({"chr":[CHR], "start":[START], "end":[END], "rho":[Localrho], "corr":[corr], "h1":[Localh1], "h2":[Localh2], "var":[var_rho], "p":[p_value], "m":[m0]})
+    df = pd.DataFrame(OrderedDict({"chr":[CHR], "start":[START], "end":[END], "rho":[Localrho], "corr":[corr], "h1":[Localh1], "h2":[Localh2], "var":[var_rho], "p":[p_value], "m":[m0]}))
 
-    queue.put(df)
+    return df
 
 def _supergnova(bfile, partition, thread, gwas_snps, n1, n2, h1, h2, pheno_corr, pheno_corr_var):
     m = len(gwas_snps)
@@ -141,20 +140,12 @@ def _supergnova(bfile, partition, thread, gwas_snps, n1, n2, h1, h2, pheno_corr,
 
     ## Calculating local genetic covariance
 
-    results = []
     pool = multiprocessing.Pool(processes = thread)
-    queue = multiprocessing.Manager().Queue()
-    for i in range(blockN):
-        pool.apply_async(calLocalCov, args=(i, tmp_partition, geno_array, coords, 
-            bps, tmp_gwas_snps, n1, n2, h1, h2, m, pheno_corr, pheno_corr_var, 
-            queue))
-    pool.close()
-    pool.join()
-    queue.put('STOP')
+    def func(i):
+        return calLocalCov(i, tmp_partition, geno_array, coords, bps, tmp_gwas_snps, n1, n2, h1, h2, m, pheno_corr, pheno_corr_var)
+    
+    results = pool.map(func, list(range(blockN)))
 
-
-    for g_cov in iter(queue.get, 'STOP'):
-        results.append(g_cov)
     df = pd.concat(results, ignore_index=True)
     return df
 
