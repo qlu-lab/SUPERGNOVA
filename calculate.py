@@ -56,7 +56,7 @@ def calLocalCov(i, partition, geno_array, coords, bps, gwas_snps, n1, n2, h1, h2
 
     tz1 = np.dot(sub_v.T, block_gwas_snps['Z_x'])
     tz2 = np.dot(sub_v.T, block_gwas_snps['Z_y'])
-    y = tz1 * tz2
+    y = tz1 * tz2 - pheno_corr * sub_d
 
     wh1 = h1 * m0 / m
     wh2 = h2 * m0 / m
@@ -65,7 +65,47 @@ def calLocalCov(i, partition, geno_array, coords, bps, gwas_snps, n1, n2, h1, h2
     Localrho = (np.sum(block_gwas_snps['Z_x'] * block_gwas_snps['Z_y']) - pheno_corr * m0) / meanLD / sqrt(n1 * n2)
 
     threshold = 1
+    cur_d = sub_d[sub_d>threshold]
+    cur_y = y[sub_d>threshold]
+    cur_dsq = cur_d ** 2
+    denominator = (wh1 * cur_d / m0 + 1 / n1) * (wh2 * cur_d / m0 + 1 / n2)
+    cur_v1 = np.sum(cur_dsq / denominator)
+    cur_v2 = np.sum(cur_y / sqrt(n1 * n2) / denominator)
+    cur_v3 = np.sum(cur_y ** 2 / (n1 * n2) / (denominator * cur_dsq))
+
+    emp_var = [(cur_v3 - (cur_v2 ** 2) / cur_v1) / (cur_v1 * (len(cur_d) - 1))]
+    theo_var = [1 / cur_v1]
+
+    for K in range(len(cur_d), len(sub_d)):
+        eig = sub_d[K]
+        tmp_y = y[K]
+        cur_v1 += eig ** 2 / ((wh1 * eig / m0 + 1 / n1) * (wh2 * eig / m0 + 1 / n2))
+        cur_v2 += tmp_y / sqrt(n1 * n2) / ((wh1 * eig / m0 + 1 / n1) * (wh2 * eig / m0 + 1 / n2))
+        cur_v3 += tmp_y ** 2 / (n1 * n2) / ((wh1 * eig ** 2 / m0 + eig / n1) * (wh2 * eig ** 2 / m0 + eig / n2))
+        emp_var.append((cur_v3 - (cur_v2 ** 2) / cur_v1) / (cur_v1 * K))
+        theo_var.append(1 / cur_v1)
     
+    max_emp_theo = np.maximum(emp_var, theo_var)
+    min_idx = np.argmin(max_emp_theo)
+
+    y = y[:(len(cur_d)+min_idx-1)]
+    sub_d = sub_d[:(len(cur_d)+min_idx-1)]
+    sub_dsq = sub_d ** 2
+
+    var_rho = m0 ** 2 * min(max_emp_theo)
+    v4 = np.sum(sub_d)/np.sum(sub_dsq)
+    var_phencorr = pheno_corr_var / (n1 * n2) * m0 ** 2 * v4 ** 2
+    var_rho += var_phencorr
+
+    se_rho = sqrt(var_rho)
+    p_value = norm.sf(abs(Localrho / se_rho)) * 2
+
+    if Localh1 < 0 or Localh2 < 0:
+        corr = np.nan
+    else:
+        corr = Localrho / sqrt(Localh1 * Localh2)
+
+    df = pd.DataFrame({"chr":[CHR], "start":[START], "end":[END], "rho":[Localrho], "corr":[corr], "h1":[Localh1], "h2":[Localh2], "var":[var_rho], "p":[p_value], "m":[m0]})
 
     queue.put(df)
 
