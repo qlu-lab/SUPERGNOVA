@@ -56,7 +56,7 @@ def pipeline(args):
     ld_scores = ldscore(args.bfile, gwas_snps)
     print('Calculating heritability...')
     h_1, h_2 = heritability(gwas_snps, ld_scores, N1, N2)
-    print('The genome-wide heritability of the first trait is {}.\nThe genome-wide heritability of the second trait is {}.'.format(h1, h2))
+    print('The genome-wide heritability of the first trait is {}.\nThe genome-wide heritability of the second trait is {}.'.format(h_1, h_2))
     print('Calculating phenotypic correlation...')
     pheno_corr, pheno_corr_var = pheno(gwas_snps, ld_scores, N1, N2, h_1, h_2)
     print('Calculating local genetic covariance...')
