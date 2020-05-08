@@ -141,10 +141,12 @@ def _supergnova(bfile, partition, thread, gwas_snps, n1, n2, h1, h2, pheno_corr,
     ## Calculating local genetic covariance
 
     pool = multiprocessing.Pool(processes = thread)
+    a_list = list(range(blockN))
+    chunks = [a_list[i::blockN] for i in range(blockN)]
     def func(i):
         return calLocalCov(i, tmp_partition, geno_array, coords, bps, tmp_gwas_snps, n1, n2, h1, h2, m, pheno_corr, pheno_corr_var)
     
-    results = pool.map(func, list(range(blockN)))
+    results = pool.map(func, chunks)
 
     df = pd.concat(results, ignore_index=True)
     return df
