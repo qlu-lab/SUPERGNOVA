@@ -5,10 +5,11 @@ from subprocess import call
 import numpy as np
 import pandas as pd
 import numpy.linalg as linalg
-
+from math import sqrt
 import ld.ldscore as ld
 import ld.parse as ps
 from ldsc_thin import __filter_bim__
+from scipy.stats import norm
 
 
 def nearest_Corr(input_mat):
@@ -61,7 +62,10 @@ def calLocalCov(i, partition, geno_array, coords, bps, gwas_snps, n1, n2, h1, h2
     wh2 = h2 * m0 / m
     Localh1 = (np.mean(block_gwas_snps['Z_x'] ** 2) - 1) / meanLD * m0 / n1
     Localh2 = (np.mean(block_gwas_snps['Z_y'] ** 2) - 1) / meanLD * m0 / n2
-    Localrho = 
+    Localrho = (np.sum(block_gwas_snps['Z_x'] * block_gwas_snps['Z_y']) - pheno_corr * m0) / meanLD / sqrt(n1 * n2)
+
+    threshold = 1
+    
 
     queue.put(df)
 
