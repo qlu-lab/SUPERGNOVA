@@ -15,6 +15,7 @@ import argparse, os.path, sys
 from subprocess import call
 import multiprocessing
 import pandas as pd
+import numpy as np
 from prep import prep
 from ldsc_thin import ldscore
 from heritability import heritability

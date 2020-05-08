@@ -24,7 +24,7 @@ def pheno(gwas_snps, ld_scores, n1, n2, h1, h2):
     nblock = 200
     blocksize = int(np.floor(m / nblock)) + 1
     q_block = np.empty(nblock)
-    for i in xrange(nblock):
+    for i in range(nblock):
         ind_start = blocksize * i 
         ind_end = min(m-1, blocksize * (i + 1))
         l = ld_scores.drop(range(ind_start, ind_end))

@@ -4,6 +4,7 @@ import multiprocessing
 from subprocess import call
 import numpy as np
 import pandas as pd
+import statsmodels
 
 import ld.ldscore as ld
 import ld.parse as ps
@@ -27,7 +28,7 @@ def calLocalCov(i, partition, geno_array, coords, bps, gwas_snps, n1, n2, h1, h2
     max_dist = 1
     block_left = ld.getBlockLefts(tmp_coords, max_dist)
 
-
+    lN, blockLD = geno_array.ldCorrVarBlocks(block_left, idx)
 
 
 def _supergnova(bfile, partition, thread, gwas_snps, n1, n2, h1, h2, pheno_corr, pheno_corr_var):
@@ -65,7 +66,7 @@ def _supergnova(bfile, partition, thread, gwas_snps, n1, n2, h1, h2, pheno_corr,
     results = []
     pool = multiprocessing.Pool(processes = thread)
     queue = multiprocessing.Manager().Queue()
-    for i in xrange(blockN):
+    for i in range(blockN):
         pool.apply_async(calLocalCov, args=(i, tmp_partition, geno_array, coords, 
             bps, tmp_gwas_snps, n1, n2, h1, h2, m, pheno_corr, pheno_corr_var, 
             queue))

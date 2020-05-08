@@ -6,12 +6,13 @@ SUPERGNOVA (SUPER GeNetic cOVariance Analyzer) is a statistical framework to per
 
 The software is developed and tested in Linux and Mac OS environments. It can perform multi-thread computing. The following softwares and packages are required:
 
-1. **Python 2.7**
+1. **Python 3**
 2. **numpy**
 3. **scipy**
 4. **pandas**
 5. **sklearn**
 6. **bitarray**
+7. **statsmodels**
 
 To perform multi-thread computing, you need to request multiple cores from your server.
 
