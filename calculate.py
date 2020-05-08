@@ -31,7 +31,8 @@ def calLocalCov(i, partition, geno_array, coords, bps, gwas_snps, n1, n2, h1, h2
     idx = np.logical_and(np.logical_and(gwas_snps['CHR']==CHR, bps <= END), bps >= START)
     m0 = np.sum(idx)
     if m0 < 120:
-        return None
+        df = pd.DataFrame(OrderedDict({"chr":[], "start":[], "end":[], "rho":[], "corr":[], "h1":[], "h2":[], "var":[], "p":[], "m":[]}))
+        return 
     
     tmp_coords = coords[idx]
 
@@ -48,7 +49,8 @@ def calLocalCov(i, partition, geno_array, coords, bps, gwas_snps, n1, n2, h1, h2
     d = d[order]
     v = v[:,order]
     if np.sum(d>0) < 120:
-        return None
+        df = pd.DataFrame(OrderedDict({"chr":[], "start":[], "end":[], "rho":[], "corr":[], "h1":[], "h2":[], "var":[], "p":[], "m":[]}))
+        return 
     
     sub_d = d[d>0]
     sub_v = v[:,d>0]
