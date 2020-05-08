@@ -12,7 +12,6 @@ The software is developed and tested in Linux and Mac OS environments. It can pe
 4. **pandas**
 5. **sklearn**
 6. **bitarray**
-7. **statsmodels**
 
 To perform multi-thread computing, you need to request multiple cores from your server.
 

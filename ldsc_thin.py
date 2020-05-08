@@ -106,7 +106,7 @@ def _ldscore(bfile, gwas_snps):
 
     # print LD Score summary
     pd.set_option('display.max_rows', 200)
-    t = df.ix[:,4:].describe()
+    t = df.iloc[:,4:].describe()
 
     np.seterr(divide='ignore', invalid='ignore')  # print NaN instead of weird errors
     # print correlation matrix including all LD Scores and sample MAF
