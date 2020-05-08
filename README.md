@@ -24,13 +24,17 @@ $ git clone https://github.com/qlu-lab/SUPERGNOVA
 $ cd ./SUPERGNOVA
 ```
 
-Suppose you would like to calculate local genetic covariance between  Crohn's disease and ulcerative colitis. We'll need a few types of files:
+Suppose you would like to calculate local genetic covariance between  autism spectrum disorder and cognitive performance. We'll need a few types of files:
 
-- **Summary statistics files:** You can get your own GWAS summary statistics files for these two diseases [here](https://www.ibdgenetics.org). We assume that the files are in the standard format that ``ldsc`` understands. If not, make sure to run them through the included ``munge_sumstats.py`` file or use the one included in ``ldsc`` (see [here](https://github.com/bulik/ldsc/wiki/Heritability-and-Genetic-Correlation#reformatting-summary-statistics) for instructions).
+- **Summary statistics files:** We assume that the files are in the standard format that ``ldsc`` understands. If not, make sure to run them through the included ``munge_sumstats.py`` file or use the one included in ``ldsc`` (see [here](https://github.com/bulik/ldsc/wiki/Heritability-and-Genetic-Correlation#reformatting-summary-statistics) for instructions). We also provide you with example GWAS summary data of autism spectrum disorder and cognitive performance. You can download them by:
+
+```
+$ mkdir ./data
+$ wget ftp://ftp.biostat.wisc.edu/pub/lu_group/Projects/SUPERGNOVA/*.txt.sumstats.gz -P ./data/
+``` 
 
 - **Plink bfiles:** These are files .bed/.bim/.fam format. You can download an example that we have prepared for you by:
 ```
-$ mkdir ./data
 $ mkdir ./data/bfiles
 $ wget ftp://ftp.biostat.wisc.edu/pub/lu_group/Projects/SUPERGNOVA/bfiles/* -P ./data/bfiles/
 ``` 
@@ -47,16 +51,16 @@ More details about these supplied files can be found in here.
 You may run the following command:
 
 ```
-python3 supergnova.py ./data/CD.sumstats.gz ./data/UC.sumstats.gz \
---N1 27726 \
---N2 28738 \
+python3 supergnova.py ./data/ASD.txt.sumstats.gz ./data/CP.txt.sumstats.gz \
+--N1 46351 \
+--N2 257828 \
 --bfile data/bfiles/eur_chr@_SNPmaf5 \
 --partition data/partition/eur_chr@.bed \
 --out results.txt
 ```
 ### Explanation of Command-Line Arguments
 
-- The first two arguments, `./data/CD.sumstats.gz` and `./data/UC.sumstats.gz`, denote the locations of the first and second summary statistics files. These files may be compressed using gzip, bz2, zip, xz, or not compressed at all. The program will infer the compression method if the files end with .gz, .bz2, .zip, xz, respectively. As previously mentioned, we assume that the files are in the standard format that `ldsc` understands.
+- The first two arguments, `./data/ASD.txt.sumstats.gz` and `./data/CP.txt.sumstats.gz`, denote the locations of the first and second summary statistics files. These files may be compressed using gzip, bz2, zip, xz, or not compressed at all. The program will infer the compression method if the files end with .gz, .bz2, .zip, xz, respectively. As previously mentioned, we assume that the files are in the standard format that `ldsc` understands.
 
 - The `N1` and `N2` arguments (optional) denote the sample sizes of the summary statistics files. If they are not provided, they will be inferred from the summary statistics files.
 
