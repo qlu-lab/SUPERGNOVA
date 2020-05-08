@@ -30,6 +30,7 @@ Suppose you would like to calculate local genetic covariance between  autism spe
 
 ```
 $ mkdir ./data
+$mkdir ./data/sumstats
 $ wget ftp://ftp.biostat.wisc.edu/pub/lu_group/Projects/SUPERGNOVA/sumstats/*.txt.sumstats.gz -P ./data/sumstats/
 ``` 
 
@@ -51,7 +52,7 @@ More details about these supplied files can be found in here.
 You may run the following command:
 
 ```
-python3 supergnova.py ./data/sumstats/ASD.txt.sumstats.gz ./data/sumstats.CP.txt.sumstats.gz \
+python3 supergnova.py ./data/sumstats/ASD.txt.sumstats.gz ./data/sumstats/CP.txt.sumstats.gz \
 --N1 46351 \
 --N2 257828 \
 --bfile data/bfiles/eur_chr@_SNPmaf5 \
