@@ -32,7 +32,7 @@ def calLocalCov(i, partition, geno_array, coords, bps, gwas_snps, n1, n2, h1, h2
     m0 = np.sum(idx)
     if m0 < 120:
         df = pd.DataFrame(OrderedDict({"chr":[], "start":[], "end":[], "rho":[], "corr":[], "h1":[], "h2":[], "var":[], "p":[], "m":[]}))
-        return df.values.tolist()
+        return df
     
     tmp_coords = coords[idx]
 
@@ -50,7 +50,7 @@ def calLocalCov(i, partition, geno_array, coords, bps, gwas_snps, n1, n2, h1, h2
     v = v[:,order]
     if np.sum(d>0) < 120:
         df = pd.DataFrame(OrderedDict({"chr":[], "start":[], "end":[], "rho":[], "corr":[], "h1":[], "h2":[], "var":[], "p":[], "m":[]}))
-        return df.values.tolist()
+        return df
     
     sub_d = d[d>0]
     sub_v = v[:,d>0]
@@ -108,7 +108,7 @@ def calLocalCov(i, partition, geno_array, coords, bps, gwas_snps, n1, n2, h1, h2
 
     df = pd.DataFrame(OrderedDict({"chr":[CHR], "start":[START], "end":[END], "rho":[Localrho], "corr":[corr], "h1":[Localh1], "h2":[Localh2], "var":[var_rho], "p":[p_value], "m":[m0]}))
 
-    return df.values.tolist()
+    return df
 
 def _supergnova(bfile, partition, thread, gwas_snps, n1, n2, h1, h2, pheno_corr, pheno_corr_var):
     m = len(gwas_snps)
@@ -144,7 +144,7 @@ def _supergnova(bfile, partition, thread, gwas_snps, n1, n2, h1, h2, pheno_corr,
     
     results = []
     def collect_results(result):
-        results.extend(result)
+        results.append(result)
     pool = multiprocessing.Pool(processes = thread)
     for i in range(blockN):
         pool.apply_async(calLocalCov, args=(i, tmp_partition, geno_array, coords, 
@@ -152,8 +152,9 @@ def _supergnova(bfile, partition, thread, gwas_snps, n1, n2, h1, h2, pheno_corr,
             callback=collect_results)
     pool.close()
     pool.join()
-    df = pd.DataFrame(results)
-    df.columns = ["chr", "start", "end", "rho", "corr", "h1", "h2", "var", "p", "m"]
+    df = pd.concat(results, ignore_index=True)
+    #df = pd.DataFrame(results)
+    #df.columns = ["chr", "start", "end", "rho", "corr", "h1", "h2", "var", "p", "m"]
     convert_dict = {"chr": int, "start": int, "end":int, "m":int}
     df = df.astype(convert_dict)
     return df
