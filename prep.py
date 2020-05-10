@@ -73,9 +73,9 @@ def prep(bfile, partition, sumstats1, sumstats2, N1, N2):
 
     # take overlap between output and ref genotype files
     df = pd.merge(bim, dfs[1], on=['SNP']).merge(dfs[0], on=['SNP'])
-
     # flip sign of z-score for allele reversals
     allign_alleles(df)
+    df = df.drop_duplicates(subset='SNP', keep=False)
     if N1 is not None:
         N1 = N1
     else:
