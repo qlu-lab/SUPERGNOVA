@@ -22,7 +22,7 @@ def loj_bim(filter_df, array):
     merge_df.loc[:,'keep'] = True
     z = pd.merge(array.IDList, merge_df, how='left', left_on=l, right_on=r, sort=False)
     ii = z['keep'] == True
-    return np.nonzero(ii)[0]
+    return ii.to_numpy().nonzero()[0]
 
 
 def __filter_bim__(filter_df, array):

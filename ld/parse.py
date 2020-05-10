@@ -270,7 +270,7 @@ def __ID_List_Factory__(colnames, keepcol, fname_end, header=None, usecols=None,
             z = pd.merge(self.IDList, merge_df, how='left', left_on=l, right_on=r,
                          sort=False)
             ii = z['keep'] == True
-            return np.nonzero(ii)[0]
+            return ii.to_numpy().nonzero()[0]
 
     return IDContainer
 

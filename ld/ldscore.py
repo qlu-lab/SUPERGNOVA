@@ -179,7 +179,8 @@ class __GenotypeArrayInMemory__(object):
         n_a = annot.shape[1]  # number of annotations
         cor_sum = np.zeros((m, n_a))
         # b = index of first SNP for which SNP 0 is not included in LD Score
-        b = np.nonzero(block_left > 0)
+        bb = block_left > 0
+        b = bb.to_numpy().nonzero()
         if np.any(b):
             b = b[0][0]
         else:
@@ -257,8 +258,8 @@ class __GenotypeArrayInMemory__(object):
         annot = np.ones((m, 1))
         n_a = 1
         cor_sum = np.zeros((m, n_a))
-        
-        b = np.nonzero(block_left > 0)
+        bb = block_left > 0
+        b = bb.to_numpy().nonzero()
         if np.any(b):
             b = b[0][0]
         else:
