@@ -180,7 +180,7 @@ class __GenotypeArrayInMemory__(object):
         cor_sum = np.zeros((m, n_a))
         # b = index of first SNP for which SNP 0 is not included in LD Score
         bb = block_left > 0
-        b = bb.to_numpy().nonzero()
+        b = bb.nonzero()
         if np.any(b):
             b = b[0][0]
         else:
@@ -259,7 +259,7 @@ class __GenotypeArrayInMemory__(object):
         n_a = 1
         cor_sum = np.zeros((m, n_a))
         bb = block_left > 0
-        b = bb.to_numpy().nonzero()
+        b = bb.nonzero()
         if np.any(b):
             b = b[0][0]
         else:
