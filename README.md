@@ -47,7 +47,7 @@ $ mkdir ./data/partition
 $ wget ftp://ftp.biostat.wisc.edu/pub/lu_group/Projects/SUPERGNOVA/partition/* -P ./data/partition/
 ```
 
-More details about these supplied files can be found in here.
+More details about these supplied files can be found in [here](https://www.biorxiv.org/content/10.1101/2020.05.08.084475v1).
 
 You may run the following command:
 
@@ -94,6 +94,6 @@ NOTE: The true heritability of some genomic regions for some traits may be very 
 
 ## Credits
 
-Those using the SUPERGNOVA software should cite: Zhang, Y.L. et al. Local genetic correlation analysis reveals heterogeneous etiologic sharing of complex traits. 2020.
+Those using the SUPERGNOVA software should cite: [Zhang, Y.L. et al. Local genetic correlation analysis reveals heterogeneous etiologic sharing of complex traits. 2020] (https://www.biorxiv.org/content/10.1101/2020.05.08.084475v1).
 
 The LD score calculation  and the estimation of phenotypic covariance are adapted from `ldsc.py` in  `ldsc` and `ldsc_thin.py` in `GNOVA`. See [Bulik-Sullivan, B. et al. An Atlas of Genetic Correlations across Human Diseases and Traits. Nature Genetics, 2015.](https://www.nature.com/articles/ng.3406) and [Lu, Q.S. et al. A powerful approach to estimating annotation-stratified genetic covariance using GWAS summary statistics. The American Journal of Human Genetics, 2017.](https://www.cell.com/ajhg/fulltext/S0002-9297(17)30453-6)
