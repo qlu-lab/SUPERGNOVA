@@ -1,6 +1,6 @@
 # SUPERGNOVA
 
-SUPERGNOVA (SUPER GeNetic cOVariance Analyzer) is a statistical framework to perform local genetic covariance analysis. SUPERGNOVA only needs GWAS summary data and a reference panel as input data. The preprint is available at [biorxiv] (https://www.biorxiv.org/content/10.1101/2020.05.08.084475v1).
+SUPERGNOVA (SUPER GeNetic cOVariance Analyzer) is a statistical framework to perform local genetic covariance analysis. SUPERGNOVA only needs GWAS summary data and a reference panel as input data. The preprint is available at [biorxiv](https://www.biorxiv.org/content/10.1101/2020.05.08.084475v1).
 
 ## Requirements
 
