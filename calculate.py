@@ -122,6 +122,7 @@ def _supergnova(bfile, partition, thread, gwas_snps, n1, n2, h1, h2, pheno_corr,
     chr_bfile = list(set(array_snps.df['CHR']))
     tmp_partition = partition[partition.iloc[:,0].isin(chr_bfile)]
     tmp_gwas_snps = gwas_snps[gwas_snps.iloc[:,0].isin(chr_bfile)]
+    tmp_gwas_snps.index=range(len(tmp_gwas_snps))
     blockN = len(tmp_partition)
     # snp list
     annot_matrix, annot_colnames, keep_snps = None, None, None
