@@ -83,8 +83,8 @@ The output will be a whitespace-delimited text file, with the rows corresponding
 - `end`: The end position of the genomic region from the input genome partiition file.
 - `rho`: The estimation of local genetic covariance.
 - `corr`: The estimation of local genetic correlation.
-- `h1`: The estimation of local heritability of the first trait by method of moments.
-- `h2`: The estimation of local heritability of the second trait by method of moments.
+- `h2_1`: The estimation of local heritability of the first trait by method of moments.
+- `h2_2`: The estimation of local heritability of the second trait by method of moments.
 - `var`: The variance of the estimation of local genetic covariance.
 - `p`: The p value of local genetic covariance.
 - `m`: The number of SNPs involved in the estimation of local genetic covariance in the genomic region.
