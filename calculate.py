@@ -94,7 +94,8 @@ def calLocalCov(i, partition, geno_array, coords, bps, gwas_snps, n1, n2, h1, h2
     sub_dsq = sub_d ** 2
 
     var_rho = m0 ** 2 * min(max_emp_theo)
-    v4 = np.sum(sub_d)/np.sum(sub_dsq)
+    q = (wh1 * sub_d / m0 + 1 / n1) * (wh2 * sub_d / m0 + 1 / n2)
+    v4 = np.sum(sub_d/q)/np.sum(sub_dsq/q)
     var_phencorr = pheno_corr_var / (n1 * n2) * m0 ** 2 * v4 ** 2
     var_rho += var_phencorr
 

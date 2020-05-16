@@ -86,7 +86,7 @@ def _ldscore(bfile, gwas_snps):
 
     #determine block widths
 
-    max_dist = 1
+    max_dist = 0.2
     coords = np.array(array_snps.df['CM'])[geno_array.kept_snps]
 
     block_left = ld.getBlockLefts(coords, max_dist)
