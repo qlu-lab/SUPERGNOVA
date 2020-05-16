@@ -37,7 +37,7 @@ def calLocalCov(i, partition, geno_array, coords, bps, gwas_snps, n1, n2, h1, h2
     tmp_coords = coords[idx]
 
     block_gwas_snps = gwas_snps[idx]
-    max_dist = 0.2
+    max_dist = 1
     block_left = ld.getBlockLefts(tmp_coords, max_dist)
 
     lN, blockLD = geno_array.ldCorrVarBlocks(block_left, idx)
@@ -59,10 +59,12 @@ def calLocalCov(i, partition, geno_array, coords, bps, gwas_snps, n1, n2, h1, h2
     tz2 = np.dot(sub_v.T, block_gwas_snps['Z_y'])
     y = tz1 * tz2 - pheno_corr * sub_d
 
-    wh1 = h1 * m0 / m
-    wh2 = h2 * m0 / m
     Localh1 = (np.mean(block_gwas_snps['Z_x'] ** 2) - 1) / meanLD * m0 / n1
     Localh2 = (np.mean(block_gwas_snps['Z_y'] ** 2) - 1) / meanLD * m0 / n2
+    #wh1 = h1 * m0 / m
+    #wh2 = h2 * m0 / m
+    wh1 = np.max([Localh1, 0])
+    wh2 = np.max([Localh2, 0])
     Localrho = (np.sum(block_gwas_snps['Z_x'] * block_gwas_snps['Z_y']) - pheno_corr * m0) / meanLD / sqrt(n1 * n2)
 
     threshold = 1
