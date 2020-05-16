@@ -37,7 +37,7 @@ def calLocalCov(i, partition, geno_array, coords, bps, gwas_snps, n1, n2, h1, h2
     tmp_coords = coords[idx]
 
     block_gwas_snps = gwas_snps[idx]
-    max_dist = 1
+    max_dist = 0.2
     block_left = ld.getBlockLefts(tmp_coords, max_dist)
 
     lN, blockLD = geno_array.ldCorrVarBlocks(block_left, idx)
