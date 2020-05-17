@@ -63,10 +63,13 @@ def calLocalCov(i, partition, geno_array, coords, bps, gwas_snps, ld_scores, n1,
 
     Localh1 = (np.mean(block_gwas_snps['Z_x'] ** 2) - 1) / meanLD * m0 / n1
     Localh2 = (np.mean(block_gwas_snps['Z_y'] ** 2) - 1) / meanLD * m0 / n2
-    wh1 = h1 * m0 / m
-    wh2 = h2 * m0 / m
-    #wh1 = np.max([Localh1, 0])
-    #wh2 = np.max([Localh2, 0])
+
+    wh11 = h1 * m0 / m
+    wh21 = h2 * m0 / m
+    wh12 = np.max([Localh1, 0])
+    wh22 = np.max([Localh2, 0])
+    wh1 = (wh11 + wh12) / 2
+    wh2 = (wh21 + wh22) / 2
     Localrho = (np.sum(block_gwas_snps['Z_x'] * block_gwas_snps['Z_y']) - pheno_corr * m0) / meanLD / sqrt(n1 * n2)
 
     threshold = 1
