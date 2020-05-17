@@ -38,11 +38,11 @@ def calLocalCov(i, partition, geno_array, coords, bps, gwas_snps, ld_scores, n1,
 
     block_gwas_snps = gwas_snps[idx]
     block_ld_scores = ld_scores[idx]
-    max_dist = 0.05
+    max_dist = 1
     block_left = ld.getBlockLefts(tmp_coords, max_dist)
 
     lN, blockLD = geno_array.ldCorrVarBlocks(block_left, idx)
-    lN = block_ld_scores["L2"]
+    #lN = block_ld_scores["L2"]
     meanLD = np.mean(lN)
     local_LD = nearest_Corr(blockLD)
 
