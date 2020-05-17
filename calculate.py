@@ -23,7 +23,7 @@ def nearest_Corr(input_mat):
     return A
 
 
-def calLocalCov(i, partition, geno_array, coords, bps, gwas_snps, ld_scores, n1, n2, h1, h2, m, pheno_corr, pheno_corr_var):
+def calLocalCov(i, partition, geno_array, coords, bps, gwas_snps, n1, n2, h1, h2, m, pheno_corr, pheno_corr_var):
     CHR = partition.iloc[i, 0]
     START = partition.iloc[i, 1]
     END = partition.iloc[i, 2]
@@ -37,7 +37,7 @@ def calLocalCov(i, partition, geno_array, coords, bps, gwas_snps, ld_scores, n1,
     tmp_coords = coords[idx]
 
     block_gwas_snps = gwas_snps[idx]
-    block_ld_scores = ld_scores[idx]
+    #block_ld_scores = ld_scores[idx]
     max_dist = 1
     block_left = ld.getBlockLefts(tmp_coords, max_dist)
 
@@ -118,7 +118,7 @@ def calLocalCov(i, partition, geno_array, coords, bps, gwas_snps, ld_scores, n1,
 
     return df
 
-def _supergnova(bfile, partition, thread, gwas_snps, ld_scores, n1, n2, h1, h2, pheno_corr, pheno_corr_var):
+def _supergnova(bfile, partition, thread, gwas_snps, n1, n2, h1, h2, pheno_corr, pheno_corr_var):
     m = len(gwas_snps)
 
     snp_file, snp_obj = bfile+'.bim', ps.PlinkBIMFile
@@ -130,7 +130,7 @@ def _supergnova(bfile, partition, thread, gwas_snps, ld_scores, n1, n2, h1, h2, 
     chr_bfile = list(set(array_snps.df['CHR']))
     tmp_partition = partition[partition.iloc[:,0].isin(chr_bfile)]
     tmp_gwas_snps = gwas_snps[gwas_snps.iloc[:,0].isin(chr_bfile)].reset_index(drop=True)
-    tmp_ld_scores = ld_scores[ld_scores.iloc[:,0].isin(chr_bfile)].reset_index(drop=True)
+    #tmp_ld_scores = ld_scores[ld_scores.iloc[:,0].isin(chr_bfile)].reset_index(drop=True)
     blockN = len(tmp_partition)
     # snp list
     annot_matrix, annot_colnames, keep_snps = None, None, None
@@ -157,7 +157,7 @@ def _supergnova(bfile, partition, thread, gwas_snps, ld_scores, n1, n2, h1, h2, 
     pool = multiprocessing.Pool(processes = thread)
     for i in range(blockN):
         pool.apply_async(calLocalCov, args=(i, tmp_partition, geno_array, coords, 
-            bps, tmp_gwas_snps, tmp_ld_scores, n1, n2, h1, h2, m, pheno_corr, pheno_corr_var),
+            bps, tmp_gwas_snps, n1, n2, h1, h2, m, pheno_corr, pheno_corr_var),
             callback=collect_results)
     pool.close()
     pool.join()
@@ -168,7 +168,7 @@ def _supergnova(bfile, partition, thread, gwas_snps, ld_scores, n1, n2, h1, h2, 
     df = df.astype(convert_dict)
     return df
 
-def calculate(bfile, partition, thread, gwas_snps, ld_scores, n1, n2, h1, h2, pheno_corr, pheno_corr_var):
+def calculate(bfile, partition, thread, gwas_snps, n1, n2, h1, h2, pheno_corr, pheno_corr_var):
     if thread is None:
         thread = multiprocessing.cpu_count()
         print('{C} CPUs are detected. Using {C} threads in computation  ... '.format(C=str(thread)))
@@ -183,10 +183,10 @@ def calculate(bfile, partition, thread, gwas_snps, ld_scores, n1, n2, h1, h2, ph
         chrs = list(set(partition.iloc[:,0]))
         for i in range(len(chrs)):
             cur_bfile = bfile.replace('@', str(chrs[i]))
-            all_dfs.append(_supergnova(cur_bfile, partition, thread, gwas_snps, ld_scores, n1, n2, h1, h2, pheno_corr, pheno_corr_var))
+            all_dfs.append(_supergnova(cur_bfile, partition, thread, gwas_snps, n1, n2, h1, h2, pheno_corr, pheno_corr_var))
             print('Computed local genetic covariance for chromosome {}'.format(chrs[i]))
         df = pd.concat(all_dfs, ignore_index=True)
     else:
-        df = _supergnova(bfile, partition, thread, gwas_snps, ld_scores, n1, n2, h1, h2, pheno_corr, pheno_corr_var)
+        df = _supergnova(bfile, partition, thread, gwas_snps, n1, n2, h1, h2, pheno_corr, pheno_corr_var)
     
     return df
