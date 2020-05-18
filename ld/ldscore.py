@@ -249,7 +249,7 @@ class __GenotypeArrayInMemory__(object):
         LD_mat : a matrix that stores the pairwise correlation.
 
         '''
-        c = 50
+        c = 5
         m, n = np.sum(idx), self.n
         LD_mat = np.zeros((m,m))       
         block_sizes = np.array(np.arange(m) - block_left)
