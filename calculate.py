@@ -23,7 +23,8 @@ def nearest_Corr(input_mat):
     return A
 
 
-def calLocalCov(i, partition, geno_array, coords, bps, gwas_snps, n1, n2, h1, h2, m, pheno_corr, pheno_corr_var):
+def calLocalCov(i, partition, geno_array, coords, bps, gwas_snps, ld_scores, n1, n2, pheno_corr, pheno_corr_var):
+    m = len(gwas_snps)
     CHR = partition.iloc[i, 0]
     START = partition.iloc[i, 1]
     END = partition.iloc[i, 2]
@@ -64,12 +65,18 @@ def calLocalCov(i, partition, geno_array, coords, bps, gwas_snps, n1, n2, h1, h2
     Localh1 = (np.mean(block_gwas_snps['Z_x'] ** 2) - 1) / meanLD * m0 / n1
     Localh2 = (np.mean(block_gwas_snps['Z_y'] ** 2) - 1) / meanLD * m0 / n2
 
-    wh11 = h1 * m0 / m
-    wh21 = h2 * m0 / m
-    wh12 = np.max([Localh1, 0])
-    wh22 = np.max([Localh2, 0])
-    wh1 = (wh11 + wh12) / 2
-    wh2 = (wh21 + wh22) / 2
+    Z_x = gwas_snps['Z_x']
+    Z_y = gwas_snps['Z_y']
+
+    h1 = (np.mean(Z_x ** 2) - 1) / np.mean(ld_scores['L2']) * m / n1
+    h2 = (np.mean(Z_y ** 2) - 1) / np.mean(ld_scores['L2']) * m / n2
+
+    wh1 = h1 * m0 / m
+    wh2 = h2 * m0 / m
+    #wh12 = np.max([Localh1, 0])
+    #wh22 = np.max([Localh2, 0])
+    #wh1 = (wh11 + wh12) / 2
+    #wh2 = (wh21 + wh22) / 2
     Localrho = (np.sum(block_gwas_snps['Z_x'] * block_gwas_snps['Z_y']) - pheno_corr * m0) / meanLD / sqrt(n1 * n2)
 
     threshold = 1
@@ -118,7 +125,7 @@ def calLocalCov(i, partition, geno_array, coords, bps, gwas_snps, n1, n2, h1, h2
 
     return df
 
-def _supergnova(bfile, partition, thread, gwas_snps, n1, n2, h1, h2, pheno_corr, pheno_corr_var):
+def _supergnova(bfile, partition, thread, gwas_snps, ld_scores, n1, n2, pheno_corr, pheno_corr_var):
     m = len(gwas_snps)
 
     snp_file, snp_obj = bfile+'.bim', ps.PlinkBIMFile
@@ -130,7 +137,7 @@ def _supergnova(bfile, partition, thread, gwas_snps, n1, n2, h1, h2, pheno_corr,
     chr_bfile = list(set(array_snps.df['CHR']))
     tmp_partition = partition[partition.iloc[:,0].isin(chr_bfile)]
     tmp_gwas_snps = gwas_snps[gwas_snps.iloc[:,0].isin(chr_bfile)].reset_index(drop=True)
-    #tmp_ld_scores = ld_scores[ld_scores.iloc[:,0].isin(chr_bfile)].reset_index(drop=True)
+    tmp_ld_scores = ld_scores[ld_scores.iloc[:,0].isin(chr_bfile)].reset_index(drop=True)
     blockN = len(tmp_partition)
     # snp list
     annot_matrix, annot_colnames, keep_snps = None, None, None
@@ -157,7 +164,7 @@ def _supergnova(bfile, partition, thread, gwas_snps, n1, n2, h1, h2, pheno_corr,
     pool = multiprocessing.Pool(processes = thread)
     for i in range(blockN):
         pool.apply_async(calLocalCov, args=(i, tmp_partition, geno_array, coords, 
-            bps, tmp_gwas_snps, n1, n2, h1, h2, m, pheno_corr, pheno_corr_var),
+            bps, tmp_gwas_snps, tmp_ld_scores, n1, n2, pheno_corr, pheno_corr_var),
             callback=collect_results)
     pool.close()
     pool.join()
@@ -168,7 +175,7 @@ def _supergnova(bfile, partition, thread, gwas_snps, n1, n2, h1, h2, pheno_corr,
     df = df.astype(convert_dict)
     return df
 
-def calculate(bfile, partition, thread, gwas_snps, n1, n2, h1, h2, pheno_corr, pheno_corr_var):
+def calculate(bfile, partition, thread, gwas_snps, ld_scores, n1, n2, pheno_corr, pheno_corr_var):
     if thread is None:
         thread = multiprocessing.cpu_count()
         print('{C} CPUs are detected. Using {C} threads in computation  ... '.format(C=str(thread)))
@@ -183,10 +190,10 @@ def calculate(bfile, partition, thread, gwas_snps, n1, n2, h1, h2, pheno_corr, p
         chrs = list(set(partition.iloc[:,0]))
         for i in range(len(chrs)):
             cur_bfile = bfile.replace('@', str(chrs[i]))
-            all_dfs.append(_supergnova(cur_bfile, partition, thread, gwas_snps, n1, n2, h1, h2, pheno_corr, pheno_corr_var))
+            all_dfs.append(_supergnova(cur_bfile, partition, thread, gwas_snps, ld_scores, n1, n2, pheno_corr, pheno_corr_var))
             print('Computed local genetic covariance for chromosome {}'.format(chrs[i]))
         df = pd.concat(all_dfs, ignore_index=True)
     else:
-        df = _supergnova(bfile, partition, thread, gwas_snps, n1, n2, h1, h2, pheno_corr, pheno_corr_var)
+        df = _supergnova(bfile, partition, thread, gwas_snps, ld_scores, n1, n2, pheno_corr, pheno_corr_var)
     
     return df

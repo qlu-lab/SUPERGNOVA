@@ -60,7 +60,7 @@ def pipeline(args):
     print('Calculating phenotypic correlation...')
     pheno_corr, pheno_corr_var = pheno(gwas_snps, ld_scores, N1, N2, h_1, h_2)
     print('Calculating local genetic covariance...')
-    out = calculate(args.bfile, bed, args.thread, gwas_snps, N1, N2, h_1, h_2, pheno_corr, pheno_corr_var)
+    out = calculate(args.bfile, bed, args.thread, gwas_snps, ld_scores, N1, N2, pheno_corr, pheno_corr_var)
     out.to_csv(args.out, sep=' ', na_rep='NA', index=False)
 
 
