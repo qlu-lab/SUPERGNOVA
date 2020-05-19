@@ -54,6 +54,7 @@ def pipeline(args):
     gwas_snps, bed, N1, N2 = prep(args.bfile, args.partition, args.sumstats1, args.sumstats2, args.N1, args.N2)
     print('Calculating LD scores...')
     ld_scores = ldscore(args.bfile, gwas_snps)
+    gwas_snps = gwas_snps[gwas_snps['SNP'].isin(ld_scores['SNP'])]
     print('Calculating heritability...')
     h_1, h_2 = heritability(gwas_snps, ld_scores, N1, N2)
     print('The genome-wide heritability of the first trait is {}.\nThe genome-wide heritability of the second trait is {}.'.format(h_1, h_2))
