@@ -33,7 +33,6 @@ def __filter_bim__(filter_df, array):
     else:
         error_msg = 'No SNPs retained for analysis'
         raise ValueError(error_msg)
-
     return merged_list
 
 
