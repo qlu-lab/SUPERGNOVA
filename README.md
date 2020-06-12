@@ -26,7 +26,7 @@ $ cd ./SUPERGNOVA
 
 Suppose you would like to calculate local genetic covariance between  autism spectrum disorder and cognitive performance. We'll need a few types of files:
 
-- **Summary statistics files:** We assume that the files are in the standard format that ``ldsc`` understands. If not, make sure to run them through the included ``munge_sumstats.py`` file or use the one included in ``ldsc`` (see [here](https://github.com/bulik/ldsc/wiki/Heritability-and-Genetic-Correlation#reformatting-summary-statistics) for instructions). We also provide you with munged example GWAS summary data of [autism spectrum disorder](https://www.nature.com/articles/s41588-019-0344-8) and [cognitive performance](https://www.nature.com/articles/s41588-018-0147-3). Before using SUPERGNOVA, please remove all the SNPs with missing values in your GWAS summary data. You can download them by:
+- **Summary statistics files:** We assume that the files are in the standard format that ``ldsc`` understands. If not, make sure to run them through the included ``munge_sumstats.py`` file under Python2.7 or use the one included in ``ldsc`` (see [here](https://github.com/bulik/ldsc/wiki/Heritability-and-Genetic-Correlation#reformatting-summary-statistics) for instructions). We also provide you with munged example GWAS summary data of [autism spectrum disorder](https://www.nature.com/articles/s41588-019-0344-8) and [cognitive performance](https://www.nature.com/articles/s41588-018-0147-3). Before using SUPERGNOVA, please remove all the SNPs with missing values in your GWAS summary data. You can download them by:
 
 ```
 $ mkdir ./data
