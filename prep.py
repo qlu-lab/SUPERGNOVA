@@ -25,7 +25,8 @@ def allign_alleles(df):
         ((a[0] == 3 - a[5]) & (a[1] == 3 - a[4])))
     df['Z_x'] *= -2 * reversed_alleles_x + 1
     df['Z_y'] *= -2 * reversed_alleles_y + 1
-    df = df[((matched_alleles_x|reversed_alleles_x)&(matched_alleles_y|reversed_alleles_y))]
+    df.where(pd.Series(((matched_alleles_x|reversed_alleles_x)&(matched_alleles_y|reversed_alleles_y))), inplace=True)
+    df.dropna(inplace=True)
 
 
 def get_files(file_name):
